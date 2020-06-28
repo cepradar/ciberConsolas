@@ -1,10 +1,8 @@
 package com.company.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
@@ -12,16 +10,9 @@ import javax.swing.table.JTableHeader;
 import com.company.utilidades.*;
 import com.company.vo.EstacionVo;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import static com.company.utilidades.Utilidades.EMPEZAR;
 import static com.company.utilidades.Utilidades.INICIO;
@@ -55,7 +46,7 @@ public class VentanaTabla extends JFrame implements MouseListener {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
-        contentPane.setLayout(new BorderLayout(0, 0));
+        contentPane.setLayout(new BorderLayout(0, 10));
 
         JLabel lblTablaPersonas = new JLabel("Tabla Estaciones");
         lblTablaPersonas.setFont(new Font("Rockwell", Font.BOLD, 25));
@@ -88,8 +79,8 @@ public class VentanaTabla extends JFrame implements MouseListener {
         titulosList.add("Estado");
         titulosList.add("EMPEZAR");
         titulosList.add("Inicio");
-        titulosList.add("Profesion");
-        titulosList.add("Edad");
+        titulosList.add("Cronometro");
+        titulosList.add("Temporizador");
         titulosList.add("Nota1");
         titulosList.add("Nota2");
         titulosList.add("Nota3");
@@ -151,10 +142,10 @@ public class VentanaTabla extends JFrame implements MouseListener {
             informacion[x][Utilidades.ORD] = listaEstaciones.get(x).getOrd() + "";
             informacion[x][Utilidades.ESTADO] = listaEstaciones.get(x).getEstado() + "";
             informacion[x][EMPEZAR] = "EMPEZAR";
-            informacion[x][Utilidades.INICIO] = "...";
-            informacion[x][Utilidades.PROFESION] = "BORRARRRRR";
+            informacion[x][Utilidades.INICIO] = "00:00:00";
+            informacion[x][Utilidades.PROFESION] = "00:00:00";
             // listaPersonas.get(x).cronometro(15) +
-            informacion[x][Utilidades.EDAD] = listaEstaciones.get(x).getEdad() + "";
+            informacion[x][Utilidades.EDAD] = "00:00:00";
             informacion[x][Utilidades.NOTA1] = listaEstaciones.get(x).getNota1() + "";
             informacion[x][Utilidades.NOTA2] = listaEstaciones.get(x).getNota2() + "";
             informacion[x][Utilidades.NOTA3] = listaEstaciones.get(x).getNota3() + "";
@@ -204,12 +195,12 @@ public class VentanaTabla extends JFrame implements MouseListener {
         tablaPersonas.setRowHeight(25);//tamaño de las celdas
         tablaPersonas.setGridColor(new java.awt.Color(0, 0, 0));
         //Se define el tamaño de largo para cada columna y su contenido
-        tablaPersonas.getColumnModel().getColumn(Utilidades.ORD).setPreferredWidth(130);//ordenador
-        tablaPersonas.getColumnModel().getColumn(Utilidades.ESTADO).setPreferredWidth(200);//estado
+        tablaPersonas.getColumnModel().getColumn(Utilidades.ORD).setPreferredWidth(100);//ordenador
+        tablaPersonas.getColumnModel().getColumn(Utilidades.ESTADO).setPreferredWidth(150);//estado
         tablaPersonas.getColumnModel().getColumn(EMPEZAR).setPreferredWidth(100);//empezar
         tablaPersonas.getColumnModel().getColumn(Utilidades.INICIO).setPreferredWidth(130);//telefono
-        tablaPersonas.getColumnModel().getColumn(Utilidades.PROFESION).setPreferredWidth(280);//profesion
-        tablaPersonas.getColumnModel().getColumn(Utilidades.EDAD).setPreferredWidth(80);//edad
+        tablaPersonas.getColumnModel().getColumn(Utilidades.PROFESION).setPreferredWidth(130);//profesion
+        tablaPersonas.getColumnModel().getColumn(Utilidades.EDAD).setPreferredWidth(130);//edad
         tablaPersonas.getColumnModel().getColumn(Utilidades.NOTA1).setPreferredWidth(100);//nota1
         tablaPersonas.getColumnModel().getColumn(Utilidades.NOTA2).setPreferredWidth(100);//nota2
         tablaPersonas.getColumnModel().getColumn(Utilidades.NOTA3).setPreferredWidth(100);//nota3
@@ -260,17 +251,18 @@ public class VentanaTabla extends JFrame implements MouseListener {
     }
 
     private void iniciarEstacion() {
-
+        EstacionVo estacionSelec = listaEstaciones.get(fila);
         if (!listaEstaciones.get(fila).getEstado()) {//si la estacion esta in/activa
             minutos = Integer.parseInt(JOptionPane.showInputDialog("Cuanto tiempo?"));
             listaEstaciones.get(fila).setEstado(true);
-            
-            listaEstaciones.get(fila).start();
+
+            estacionSelec.start();
             tablaPersonas.setValueAt(listaEstaciones.get(fila).getInicio(), fila, INICIO);
 
-        } else {int aux = JOptionPane.showConfirmDialog(null, "seguro que desea cancelar");
+        } else {
+            int aux = JOptionPane.showConfirmDialog(null, "seguro que desea cancelar");
             if (aux == 0) {
-                listaEstaciones.get(fila).setEstado(false);
+                estacionSelec.setEstado(false);
             }
         }
     }
@@ -287,7 +279,9 @@ public class VentanaTabla extends JFrame implements MouseListener {
 
         //teniendo la fila entonces se obtiene el objeto correspondiente para enviarse como parammetro o imprimir la información
         EstacionVo miEstacion = new EstacionVo();
+        //se obtiene el estado de la estacion seleccionada
         miEstacion.setOrd(tablaPersonas.getValueAt(fila, Utilidades.ORD).toString());
+        //si el estado es verdadero entonces desactiva la estacion (false)
         if (tablaPersonas.getValueAt(fila, Utilidades.ESTADO).toString().compareToIgnoreCase("true") == 0) {
             miEstacion.setEstado(true);
         } else miEstacion.setEstado(false);

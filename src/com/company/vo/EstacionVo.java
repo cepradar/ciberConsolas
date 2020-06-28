@@ -1,6 +1,7 @@
 package com.company.vo;
 
 import com.company.utilidades.Cronometro;
+import com.company.utilidades.Temporizador;
 
 import javax.swing.*;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ public class EstacionVo {
     private boolean estado;
     private String inicio;
     public Cronometro cronometro;
+    public Temporizador temporizador;
     private int edad;
     private double nota1;
     private double nota2;
@@ -72,7 +74,9 @@ public class EstacionVo {
 
     public void start() {
         cronometro = new Cronometro();
+        temporizador = new Temporizador();
         cronometro.start();
+        temporizador.start();
     }//ejecuta el hilo con el cronometro
 
     public int getEdad() {
