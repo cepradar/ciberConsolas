@@ -3,7 +3,6 @@ package com.company.vo;
 import com.company.utilidades.Cronometro;
 import com.company.utilidades.Temporizador;
 
-import javax.swing.*;
 import java.util.Calendar;
 
 import static com.company.gui.VentanaTabla.fila;
@@ -12,14 +11,15 @@ import static com.company.utilidades.Utilidades.ESTADO;
 
 public class EstacionVo {
 
+
     private String ord;
     private boolean estado;
     private String inicio;
     public Cronometro cronometro;
     public Temporizador temporizador;
     private int edad;
-    private double nota1;
-    private double nota2;
+    private String tipo;
+    private double precio;
     private double nota3;
     private double promedio;
 
@@ -28,14 +28,14 @@ public class EstacionVo {
     }
 
     public EstacionVo(String ord, boolean estado, int edad,
-                      double nota1, double nota2, double nota3, double promedio) {
+                      double precio, String tipo, double nota3, double promedio) {
         super();
         this.ord = ord;
         this.estado = estado;
         this.inicio = "EMPTY";
         this.edad = edad;
-        this.nota1 = nota1;
-        this.nota2 = nota2;
+        this.precio = precio;
+        this.tipo = tipo;
         this.nota3 = nota3;
         this.promedio = promedio;
     }
@@ -87,20 +87,20 @@ public class EstacionVo {
         this.edad = edad;
     }
 
-    public double getNota1() {
-        return nota1;
+    public double getPrecio() {
+        return precio;
     }
 
-    public void setNota1(double nota1) {
-        this.nota1 = nota1;
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
-    public double getNota2() {
-        return nota2;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setNota2(double nota2) {
-        this.nota2 = nota2;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public double getNota3() {

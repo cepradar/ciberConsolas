@@ -26,9 +26,8 @@ public class VentanaTabla extends JFrame implements MouseListener {
     public int columna, nuHora, nuMin, nuSeg;
     public static ArrayList<EstacionVo> listaEstaciones;//lista que simula la información de la BD
 
+    public static ArrayList<EstacionVo> lista = new ArrayList<>();
     ModeloTabla modelo;//modelo definido en la clase ModeloTabla
-    private int filasTabla;
-    private int columnasTabla;
 
     /**
      * Create the frame.
@@ -48,6 +47,22 @@ public class VentanaTabla extends JFrame implements MouseListener {
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 10));
 
+        JMenuBar barraMenu = new JMenuBar();
+        JMenu menuArchivo = new JMenu("Archivo");
+        JMenu menuEditar = new JMenu("Editar");
+        barraMenu.add(menuArchivo);
+        barraMenu.add(menuEditar);
+        AccionCambiaPrecios cPrecios = new AccionCambiaPrecios();
+        cPrecios.putValue(Action.NAME,"Cambiar Precios");
+        JMenuItem ePrecio = new JMenuItem(cPrecios);
+        JMenuItem eCabinas = new JMenuItem("Actualizar cabinas");
+        JMenuItem eAyuda = new JMenuItem("Help");
+        menuEditar.add(ePrecio);
+        menuEditar.add(eCabinas);
+        menuEditar.add(new JSeparator()); // Una rayita separadora.
+        menuEditar.add(eAyuda);
+        contentPane.add(barraMenu, BorderLayout.SOUTH);
+
         JLabel lblTablaPersonas = new JLabel("Tabla Estaciones");
         lblTablaPersonas.setFont(new Font("Rockwell", Font.BOLD, 25));
         contentPane.add(lblTablaPersonas, BorderLayout.NORTH);
@@ -65,12 +80,18 @@ public class VentanaTabla extends JFrame implements MouseListener {
 
     }
 
+    public static void setLista(ArrayList<EstacionVo> lista) {
+        VentanaTabla.lista = lista;
+    }
+
     /**
      * Metodo que permite construir la tabla de personas
      * se crean primero las columnas y luego se asigna la información
      */
     private void construirTabla() {
 
+
+        //Aca recibe un objeto de tipo List o ArrayList que contiene las estaciones del local
         listaEstaciones = consultarListaPersonas();
 
         ArrayList<String> titulosList = new ArrayList<>();
@@ -81,7 +102,7 @@ public class VentanaTabla extends JFrame implements MouseListener {
         titulosList.add("Inicio");
         titulosList.add("Cronometro");
         titulosList.add("Temporizador");
-        titulosList.add("Nota1");
+        titulosList.add("Tipo");
         titulosList.add("Nota2");
         titulosList.add("Nota3");
         titulosList.add("Promedio");
@@ -108,15 +129,15 @@ public class VentanaTabla extends JFrame implements MouseListener {
      * @return
      */
     private ArrayList<EstacionVo> consultarListaPersonas() {
-        ArrayList<EstacionVo> lista = new ArrayList<>();
 
-        lista.add(new EstacionVo("1234", false, 23, 2.5, 4.3, 3.0, (2.5 + 4.3 + 3) / 33));
-        lista.add(new EstacionVo("3455", false, 0, 0, 0, 0, 0));
-        lista.add(new EstacionVo("3214", true, 0, 0, 0, 0, 0));
-        lista.add(new EstacionVo("7886", false, 0, 0, 0, 0, 0));
-        lista.add(new EstacionVo("4331", false, 0, 0, 0, 0, 0));
-        lista.add(new EstacionVo("98675", false, 0, 0, 0, 0, 0));
-        lista.add(new EstacionVo("1221", false, 0, 0, 0, 0, 0));
+
+        lista.add(new EstacionVo("1234", false, 23, 2.5, "PC", 3.0, (2.5 + 4.3 + 3) / 33));
+        lista.add(new EstacionVo("3455", false, 0, 0, "XBOX", 0, 0));
+        lista.add(new EstacionVo("3214", true, 0, 0, "PS3", 0, 0));
+        lista.add(new EstacionVo("7886", false, 0, 0, "XBOX", 0, 0));
+        lista.add(new EstacionVo("4331", false, 0, 0, "XBOX", 0, 0));
+        lista.add(new EstacionVo("98675", false, 0, 0, "PS3", 0, 0));
+        lista.add(new EstacionVo("1221", false, 0, 0, "PC", 0, 0));
 
         return lista;
     }
@@ -146,8 +167,8 @@ public class VentanaTabla extends JFrame implements MouseListener {
             informacion[x][Utilidades.PROFESION] = "00:00:00";
             // listaPersonas.get(x).cronometro(15) +
             informacion[x][Utilidades.EDAD] = "00:00:00";
-            informacion[x][Utilidades.NOTA1] = listaEstaciones.get(x).getNota1() + "";
-            informacion[x][Utilidades.NOTA2] = listaEstaciones.get(x).getNota2() + "";
+            informacion[x][Utilidades.NOTA1] = listaEstaciones.get(x).getPrecio() + "";
+            informacion[x][Utilidades.NOTA2] = listaEstaciones.get(x).getTipo() + "";
             informacion[x][Utilidades.NOTA3] = listaEstaciones.get(x).getNota3() + "";
             informacion[x][Utilidades.PROMEDIO] = listaEstaciones.get(x).getPromedio() + "";
             //se asignan las plabras clave para que en la clase GestionCeldas se use para asignar el icono correspondiente
@@ -171,8 +192,8 @@ public class VentanaTabla extends JFrame implements MouseListener {
         //se asigna el modelo a la tabla
         tablaPersonas.setModel(modelo);
 
-        filasTabla = tablaPersonas.getRowCount();
-        columnasTabla = tablaPersonas.getColumnCount();
+        int filasTabla = tablaPersonas.getRowCount();
+        int columnasTabla = tablaPersonas.getColumnCount();
 
         //se asigna el tipo de dato que tendrán las celdas de cada columna definida respectivamente para validar su personalización
         tablaPersonas.getColumnModel().getColumn(Utilidades.EDAD).setCellRenderer(new GestionCeldas("numerico"));

@@ -31,11 +31,10 @@ public class Cronometro extends Thread { //una clase que hereda de la clase Thre
                         nuSeg = 0;//pongo en cero los segundos
                     }
                 }
-                //System.out.println(fila+ PROFESION);
                 tablaPersonas.setValueAt(nuHora + ":" + nuMin + ":" + nuSeg, fila,PROFESION);
                 System.out.println(nuHora + ":" + nuMin + ":" + nuSeg);//Muestro en pantalla el cronometro
                 sleep(999);//Duermo el hilo durante 999 milisegundos(casi un segundo, quintandole el tiempo de proceso)
-                if((60*nuHora)+nuMin >= tiempoTotal) break;
+                if((60*nuHora)+nuMin >= tiempoTotal) {listaEstaciones.get(fila).setEstado(false); break;}
             }//Fin del for infinito
         } catch (Exception ex) {
             System.out.println(ex.getMessage());//Imprima el error
